@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PronunciaMente — Fonética Española</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d12;
+    --surface: #16161f;
+    --surface2: #1e1e2a;
+    --border: #2a2a3a;
+    --accent: #e85d4a;
+    --accent2: #f5a623;
+    --gold: #d4a843;
+    --text: #f0eee8;
+    --text-muted: #8a8899;
+    --green: #4caf82;
+    --red: #e85d4a;
+    --blue: #5b9cf5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 10% 20%, rgba(232,93,74,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 90% 80%, rgba(91,156,245,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(212,168,67,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    padding: 40px 0 20px;
+    text-align: center;
+  }
+
+  .logo-eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  h1 .thin { font-weight: 700; color: var(--text-muted); }
+  h1 .accent { color: var(--accent); font-style: italic; }
+
+  .tagline {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Level selector */
+  .level-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 32px 0 20px;
+  }
+
+  .level-btn {
+    padding: 7px 20px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .level-btn.active, .level-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* Category tabs */
+  .categories {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 28px;
+    scrollbar-width: none;
+  }
+  .categories::-webkit-scrollbar { display: none; }
+
+  .cat-btn {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cat-btn.active {
+    background: var(--surface2);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Main practice area */
+  .practice-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .practice-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--blue));
+  }
+
+  .card-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  /* Pair display */
+  .pair-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 20px 0 32px;
+  }
+
+  .word-block {
+    text-align: center;
+    cursor: pointer;
+    padding: 24px 36px;
+    border-radius: 16px;
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex: 1;
+    max-width: 240px;
+    position: relative;
+  }
+
+  .word-block:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px rgba(232, 93, 74, 0.2);
+  }
+
+  .word-block.playing {
+    border-color: var(--gold);
+    background: rgba(212, 168, 67, 0.08);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(212, 168, 67, 0.25);
+  }
+
+  .word-block .word {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    transition: color 0.2s;
+  }
+
+  .word-block:hover .word, .word-block.playing .word {
+    color: var(--gold);
+  }
+
+  .word-block .ipa {
+    font-size: 15px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .word-block .meaning {
+    font-size: 12px;
+    color: var(--accent2);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  .word-block .play-hint {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 18px;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+  }
+  .word-block:hover .play-hint { opacity: 1; }
+
+  .vs-divider {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .vs-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .vs-line {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+  }
+
+  /* Phoneme highlight */
+  .phoneme-focus {
+    text-align: center;
+    margin: 0 0 28px;
+    padding: 16px 24px;
+    background: rgba(91, 156, 245, 0.06);
+    border: 1px solid rgba(91, 156, 245, 0.2);
+    border-radius: 12px;
+  }
+
+  .phoneme-focus .label {
+    font-size: 11px;
+    color: var(--blue);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .phoneme-focus .focus-text {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .phoneme-focus .focus-text strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #d44a37; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+
+  /* Quiz mode */
+  .quiz-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 40px;
+    margin-bottom: 20px;
+  }
+
+  .quiz-question {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .quiz-question .q-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .quiz-question .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .quiz-opt {
+    padding: 18px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: var(--text);
+  }
+
+  .quiz-opt:hover:not(:disabled) {
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(91, 156, 245, 0.15);
+  }
+
+  .quiz-opt.correct {
+    border-color: var(--green);
+    background: rgba(76, 175, 130, 0.1);
+    color: var(--green);
+  }
+
+  .quiz-opt.wrong {
+    border-color: var(--red);
+    background: rgba(232, 93, 74, 0.1);
+    color: var(--red);
+  }
+
+  /* Progress */
+  .progress-bar-wrap {
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .score-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .score-display .score-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  /* Feedback */
+  .feedback-banner {
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 16px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .feedback-banner.show { display: flex; }
+  .feedback-banner.correct-fb { background: rgba(76,175,130,0.12); border: 1px solid rgba(76,175,130,0.3); color: var(--green); }
+  .feedback-banner.wrong-fb { background: rgba(232,93,74,0.1); border: 1px solid rgba(232,93,74,0.25); color: #f08070; }
+
+  /* Tips section */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .tip-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .tip-card:hover { border-color: var(--gold); }
+
+  .tip-card .tip-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .tip-card .tip-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--gold);
+  }
+
+  .tip-card .tip-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Mode tabs */
+  .mode-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 20px;
+  }
+
+  .mode-tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: 9px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mode-tab.active {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  /* Result screen */
+  .result-screen {
+    text-align: center;
+    padding: 48px 24px;
+  }
+
+  .result-screen .big-score {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .result-screen .result-msg {
+    font-size: 18px;
+    margin: 16px 0 8px;
+    font-weight: 600;
+  }
+
+  .result-screen .result-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  /* Pair nav */
+  .pair-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .pair-counter {
+    font-size: 13px;
+    color: var(--text-muted);
+    min-width: 80px;
+    text-align: center;
+  }
+
+  /* Sentence mode */
+  .sentence-area {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    font-size: 16px;
+    line-height: 1.7;
+    border-left: 3px solid var(--accent);
+  }
+
+  .sentence-area .highlight {
+    color: var(--accent);
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  /* Audio visualizer animation */
+  @keyframes soundwave {
+    0%, 100% { transform: scaleY(0.3); }
+    50% { transform: scaleY(1); }
+  }
+
+  .soundwave {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 20px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .soundwave span {
+    display: block;
+    width: 3px;
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: soundwave 0.8s ease-in-out infinite;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .soundwave.active span { opacity: 1; }
+  .soundwave span:nth-child(2) { animation-delay: 0.1s; }
+  .soundwave span:nth-child(3) { animation-delay: 0.2s; }
+  .soundwave span:nth-child(4) { animation-delay: 0.1s; }
+  .soundwave span:nth-child(5) { animation-delay: 0.05s; }
+
+  /* Fade-in animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up { animation: fadeUp 0.4s ease forwards; }
+
+  /* Hide/show sections */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .practice-card, .quiz-section { padding: 24px 20px; }
+    .pair-display { flex-direction: column; gap: 12px; }
+    .vs-divider { flex-direction: row; }
+    .vs-line { width: 40px; height: 1px; }
+    .quiz-options { grid-template-columns: 1fr; }
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-a1 { background: rgba(76,175,130,0.15); color: var(--green); border: 1px solid rgba(76,175,130,0.3); }
+  .badge-a2 { background: rgba(245,166,35,0.15); color: var(--accent2); border: 1px solid rgba(245,166,35,0.3); }
+
+  /* Streak */
+  .streak-bar {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .streak-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .streak-dot.lit { background: var(--gold); box-shadow: 0 0 6px rgba(212,168,67,0.6); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo-eyebrow">🇪🇸 Fonética Española</div>
+    <h1>
+      <span class="thin">Pronuncia</span><span class="accent">Mente</span>
+    </h1>
+    <p class="tagline">Pares mínimos · Discriminación auditiva · Niveles A1–A2</p>
+  </header>
+
+  <!-- Level -->
+  <div class="level-bar">
+    <button class="level-btn active" onclick="setLevel('all')">Todos</button>
+    <button class="level-btn" onclick="setLevel('a1')">A1</button>
+    <button class="level-btn" onclick="setLevel('a2')">A2</button>
+  </div>
+
+  <!-- Mode tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('practice')">🔊 Práctica</button>
+    <button class="mode-tab" onclick="setMode('quiz')">🎯 Test</button>
+    <button class="mode-tab" onclick="setMode('tips')">📖 Consejos</button>
+  </div>
+
+  <!-- Category filter -->
+  <div class="categories" id="catBar"></div>
+
+  <!-- PRACTICE VIEW -->
+  <div class="view active" id="practiceView">
+    <div class="practice-card fade-up">
+      <div class="card-label">PAR MÍNIMO — HAZ CLIC PARA ESCUCHAR</div>
+
+      <div id="pairBadge" style="text-align:center;margin-bottom:12px;"></div>
+
+      <div class="phoneme-focus" id="phonemeFocus">
+        <div class="label">CONTRASTE FONÉTICO</div>
+        <div class="focus-text" id="focusText">–</div>
+      </div>
+
+      <div class="pair-display">
+        <div class="word-block" id="wordA" onclick="speakWord('A')">
+          <span class="play-hint">🔊</span>
+          <div class="word" id="wordAText">–</div>
+          <div class="ipa" id="ipaA">–</div>
+          <div class="meaning" id="meaningA">–</div>
+          <div class="soundwave" id="waveA">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="vs-divider">
+          <div class="vs-line"></div>
+          <div class="vs-text">vs</div>
+          <div class="vs-line"></div>
+        </div>
+        <div class="word-block" id="wordB" onclick="speakWord('B')">
+          <span class="play-hint">🔊</span>
+          <div class="word" id="wordBText">–</div>
+          <div class="ipa" id="ipaB">–</div>
+          <div class="meaning" id="meaningB">–</div>
+          <div class="soundwave" id="waveB">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example sentences -->
+      <div class="sentence-area" id="sentenceArea"></div>
+
+      <div class="actions">
+        <button class="btn btn-primary" onclick="speakBoth()">▶ Escuchar los dos</button>
+        <button class="btn btn-secondary" onclick="speakAlternating()">🔄 Alternando x3</button>
+      </div>
+    </div>
+
+    <div class="pair-nav">
+      <button class="btn btn-ghost" onclick="prevPair()">← Anterior</button>
+      <span class="pair-counter" id="pairCounter">1 / 1</span>
+      <button class="btn btn-ghost" onclick="nextPair()">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ VIEW -->
+  <div class="view" id="quizView">
+    <div class="quiz-section fade-up" id="quizContent">
+      <div class="score-display">
+        <span>Pregunta <span id="qNum">1</span> / <span id="qTotal">10</span></span>
+        <span>✓ <span class="score-val" id="qScore">0</span></span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="qProgress" style="width:0%"></div>
+      </div>
+      <div class="streak-bar" id="streakBar"></div>
+
+      <div class="quiz-question">
+        <div class="q-label" id="qLabel">ESCUCHA Y SELECCIONA</div>
+        <div class="q-text" id="qText">–</div>
+      </div>
+
+      <div class="quiz-options" id="quizOptions"></div>
+
+      <div class="actions" style="justify-content:space-between;">
+        <button class="btn btn-ghost" id="playQBtn" onclick="playQuizAudio()">🔊 Escuchar otra vez</button>
+        <button class="btn btn-secondary" id="nextQBtn" onclick="nextQuestion()" style="display:none">Siguiente →</button>
+      </div>
+
+      <div class="feedback-banner" id="qFeedback"></div>
+    </div>
+
+    <div class="view" id="resultView">
+      <div class="result-screen fade-up">
+        <div class="big-score" id="finalScore">–</div>
+        <div class="result-msg" id="resultMsg">–</div>
+        <div class="result-sub" id="resultSub">–</div>
+        <div class="actions" style="justify-content:center">
+          <button class="btn btn-primary" onclick="startQuiz()">🔄 Repetir test</button>
+          <button class="btn btn-secondary" onclick="setMode('practice')">← Volver a práctica</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS VIEW -->
+  <div class="view" id="tipsView">
+    <div class="section-title">Guías de pronunciación</div>
+    <div class="tips-grid" id="tipsGrid"></div>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const pairs = [
+  {
+    id: 1, level: 'a1', cat: 'r/rr',
+    a: { word: 'pero', ipa: '/ˈpe.ɾo/', meaning: 'but (conjunción)', lang: 'es-ES' },
+    b: { word: 'perro', ipa: '/ˈpe.ro/', meaning: 'dog (animal)', lang: 'es-ES' },
+    contrast: 'La <strong>/ɾ/</strong> es suave (vibración simple) · La <strong>/r/</strong> es fuerte (vibración múltiple)',
+    sentences: ['"Quiero un perro, pero vivo en un piso pequeño."'
+    ]
+  },
+  {
+    id: 2, level: 'a1', cat: 'r/rr',
+    a: { word: 'caro', ipa: '/ˈka.ɾo/', meaning: 'expensive', lang: 'es-ES' },
+    b: { word: 'carro', ipa: '/ˈka.ro/', meaning: 'car / cart', lang: 'es-ES' },
+    contrast: 'Entre vocales: <strong>/ɾ/</strong> = suave · <strong>/r/</strong> = vibrante fuerte',
+    sentences: ['"El carro nuevo es muy caro."']
+  },
+  {
+    id: 3, level: 'a1', cat: 'r/rr',
+    a: { word: 'mira', ipa: '/ˈmi.ɾa/', meaning: 'he/she looks', lang: 'es-ES' },
+    b: { word: 'mirra', ipa: '/ˈmi.ra/', meaning: 'myrrh (resina)', lang: 'es-ES' },
+    contrast: 'La posición de la lengua cambia: toca el paladar una vez vs. varias veces',
+    sentences: ['"Mira, la mirra es un regalo del oriente."']
+  },
+  {
+    id: 4, level: 'a1', cat: 's/z',
+    a: { word: 'caza', ipa: '/ˈka.θa/', meaning: 'hunt (cazar)', lang: 'es-ES' },
+    b: { word: 'casa', ipa: '/ˈka.sa/', meaning: 'house', lang: 'es-ES' },
+    contrast: 'En España: <strong>/θ/</strong> como "th" inglés · En Latinoamérica ambas son /s/ (seseo)',
+    sentences: ['"La casa está cerca de donde hacen la caza."']
+  },
+  {
+    id: 5, level: 'a1', cat: 's/z',
+    a: { word: 'cazo', ipa: '/ˈka.θo/', meaning: 'saucepan / I hunt', lang: 'es-ES' },
+    b: { word: 'caso', ipa: '/ˈka.so/', meaning: 'case / situation', lang: 'es-ES' },
+    contrast: '<strong>z</strong> = /θ/ · <strong>s</strong> = /s/ (distinción peninsular)',
+    sentences: ['"En ese caso, necesito el cazo grande."']
+  },
+  {
+    id: 6, level: 'a1', cat: 'b/v',
+    a: { word: 'beso', ipa: '/ˈbe.so/', meaning: 'kiss', lang: 'es-ES' },
+    b: { word: 'veso', ipa: '/ˈbe.so/', meaning: '(no existe — mismo sonido!)', lang: 'es-ES' },
+    contrast: 'En español, <strong>b</strong> y <strong>v</strong> suenan <strong>igual</strong> → /b/. ¡No hay diferencia fonética!',
+    sentences: ['"Escribimos «beso» con B, «vino» con V — pero el sonido es el mismo."']
+  },
+  {
+    id: 7, level: 'a1', cat: 'b/v',
+    a: { word: 'tubo', ipa: '/ˈtu.βo/', meaning: 'tube / pipe', lang: 'es-ES' },
+    b: { word: 'tuvo', ipa: '/ˈtu.βo/', meaning: 'he/she had', lang: 'es-ES' },
+    contrast: 'Entre vocales, <strong>b/v</strong> se pronuncian como fricativa suave <strong>/β/</strong> — ¡idénticas!',
+    sentences: ['"María tuvo un tubo roto en casa."']
+  },
+  {
+    id: 8, level: 'a2', cat: 'g/j',
+    a: { word: 'coge', ipa: '/ˈko.xe/', meaning: 'he/she picks up', lang: 'es-ES' },
+    b: { word: 'coje', ipa: '/ˈko.xe/', meaning: '(ortografía incorrecta)', lang: 'es-ES' },
+    contrast: '<strong>g</strong> ante e/i → /x/ (igual que j). Cuidado con la ortografía.',
+    sentences: ['"Coge el libro de la mesa."']
+  },
+  {
+    id: 9, level: 'a2', cat: 'g/j',
+    a: { word: 'gente', ipa: '/ˈxen.te/', meaning: 'people', lang: 'es-ES' },
+    b: { word: 'jente', ipa: '/ˈxen.te/', meaning: '(error ortográfico)', lang: 'es-ES' },
+    contrast: 'La <strong>g</strong> ante <strong>e</strong> o <strong>i</strong> suena como <strong>j</strong>: /x/',
+    sentences: ['"Hay mucha gente en el centro."']
+  },
+  {
+    id: 10, level: 'a2', cat: 'll/y',
+    a: { word: 'pollo', ipa: '/ˈpo.ʎo/', meaning: 'chicken', lang: 'es-ES' },
+    b: { word: 'poyo', ipa: '/ˈpo.ʝo/', meaning: 'stone bench', lang: 'es-ES' },
+    contrast: 'En español estándar: <strong>ll</strong> = /ʎ/ y <strong>y</strong> = /ʝ/. En muchas variedades: ¡suenan igual! (yeísmo)',
+    sentences: ['"El pollo está en el poyo de la cocina."']
+  },
+  {
+    id: 11, level: 'a2', cat: 'll/y',
+    a: { word: 'halla', ipa: '/ˈa.ʎa/', meaning: 'he/she finds', lang: 'es-ES' },
+    b: { word: 'haya', ipa: '/ˈa.ʝa/', meaning: 'beech tree / subjuntivo', lang: 'es-ES' },
+    contrast: 'El <strong>yeísmo</strong> hace que ll/y suenen igual en gran parte del mundo hispanohablante',
+    sentences: ['"Espero que haya alguien que lo halla."']
+  },
+  {
+    id: 12, level: 'a1', cat: 'h muda',
+    a: { word: 'hacer', ipa: '/a.ˈθer/', meaning: 'to do / make', lang: 'es-ES' },
+    b: { word: 'a ser', ipa: '/a.ˈser/', meaning: 'to be (infinitivo)', lang: 'es-ES' },
+    contrast: 'La <strong>h</strong> en español es siempre <strong>muda</strong>. "Hacer" comienza con vocal: /a/',
+    sentences: ['"Va a ser difícil hacer todo esto hoy."']
+  },
+  {
+    id: 13, level: 'a1', cat: 'vocales',
+    a: { word: 'mesa', ipa: '/ˈme.sa/', meaning: 'table', lang: 'es-ES' },
+    b: { word: 'misa', ipa: '/ˈmi.sa/', meaning: 'mass (church)', lang: 'es-ES' },
+    contrast: 'Vocal <strong>e</strong> /e/ vs vocal <strong>i</strong> /i/ — en español las vocales son puras y cortas',
+    sentences: ['"La misa es en la mesa del altar."']
+  },
+  {
+    id: 14, level: 'a1', cat: 'vocales',
+    a: { word: 'bote', ipa: '/ˈbo.te/', meaning: 'jar / boat / bounce', lang: 'es-ES' },
+    b: { word: 'bute', ipa: '/ˈbu.te/', meaning: '(coloquial: muy bueno)', lang: 'es-ES' },
+    contrast: 'Vocal <strong>o</strong> /o/ vs vocal <strong>u</strong> /u/ — 5 vocales puras en español',
+    sentences: ['"El bote está bute de fresco en el mercado."']
+  },
+  {
+    id: 15, level: 'a2', cat: 'acentos',
+    a: { word: 'sábana', ipa: '/ˈsa.βa.na/', meaning: 'bed sheet', lang: 'es-ES' },
+    b: { word: 'sabana', ipa: '/sa.ˈβa.na/', meaning: 'savannah', lang: 'es-ES' },
+    contrast: 'La tilde cambia el <strong>acento</strong>: <strong>SÁ</strong>-ba-na vs sa-<strong>BA</strong>-na',
+    sentences: ['"Durmió en la sábana bajo el sol de la sabana africana."']
+  },
+  {
+    id: 16, level: 'a2', cat: 'acentos',
+    a: { word: 'límite', ipa: '/ˈli.mi.te/', meaning: 'limit (noun)', lang: 'es-ES' },
+    b: { word: 'limité', ipa: '/li.mi.ˈte/', meaning: 'I limited (past)', lang: 'es-ES' },
+    contrast: 'Acento en la <strong>primera</strong> sílaba vs en la <strong>última</strong>',
+    sentences: ['"Me limité al límite de velocidad."']
+  },
+  {
+    id: 17, level: 'a2', cat: 'c/qu',
+    a: { word: 'kilo', ipa: '/ˈki.lo/', meaning: 'kilogram', lang: 'es-ES' },
+    b: { word: 'quilo', ipa: '/ˈki.lo/', meaning: 'quilogram (variante)', lang: 'es-ES' },
+    contrast: '<strong>k</strong>, <strong>qu</strong> (ante e/i) y <strong>c</strong> (ante a/o/u) representan el mismo sonido /k/',
+    sentences: ['"Un kilo de tomates, por favor."']
+  },
+  {
+    id: 18, level: 'a2', cat: 'r/rr',
+    a: { word: 'para', ipa: '/ˈpa.ɾa/', meaning: 'for / stops', lang: 'es-ES' },
+    b: { word: 'parra', ipa: '/ˈpa.ra/', meaning: 'grapevine', lang: 'es-ES' },
+    contrast: 'La doble <strong>rr</strong> siempre es vibrante fuerte /r/ entre vocales',
+    sentences: ['"Para hacer vino, necesitas una parra."']
+  }
+];
+
+const categories = [...new Set(pairs.map(p => p.cat))];
+
+const tips = [
+  { icon: '👅', title: 'La R simple /ɾ/', text: 'Toca el paladar con la punta de la lengua una sola vez. Como la "d" suave inglesa en "butter".' },
+  { icon: '🌀', title: 'La RR vibrante /r/', text: 'La lengua vibra varias veces rápidamente. Empieza practicando "drrr" o imitando un motor de coche.' },
+  { icon: '🇪🇸', title: 'La Z y C española /θ/', text: 'En España, c ante e/i y la z suenan como la "th" de "think" en inglés. En América, se usa /s/ para todo.' },
+  { icon: '🔇', title: 'La H siempre muda', text: 'La H en español nunca se pronuncia: "hola" = /ola/, "hacer" = /aθer/. ¡Nunca aspires la h!' },
+  { icon: '🔀', title: 'B y V son iguales', text: 'No existe diferencia fonética entre b y v. Ambas se pronuncian /b/ al inicio de palabra y /β/ entre vocales.' },
+  { icon: '🎵', title: 'Vocales puras', text: 'Las 5 vocales españolas (a,e,i,o,u) son siempre cortas, tensas y puras. No se convierten en diptongos como en inglés.' },
+  { icon: '💡', title: 'La tilde cambia el significado', text: '"sábana" (sheet) vs "sabana" (savannah). El acento escrito indica dónde poner la fuerza de la voz.' },
+  { icon: '🗺️', title: 'Variación dialectal', text: 'El seseo (usar /s/ para c/z) es normal en Latinoamérica y Canarias. El yeísmo (ll=y) es mayoritario en el mundo hispanohablante.' },
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let currentLevel = 'all';
+let currentCat = 'all';
+let filteredPairs = [...pairs];
+let currentPairIdx = 0;
+let currentMode = 'practice';
+
+// Quiz state
+let quizPairs = [];
+let quizIdx = 0;
+let quizScore = 0;
+let quizAnswered = false;
+let streak = 0;
+const QUIZ_TOTAL = 10;
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+function init() {
+  buildCatBar();
+  buildTips();
+  filterPairs();
+  buildStreakBar();
+}
+
+function buildCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = `<button class="cat-btn active" data-cat="all" onclick="setCat('all')">⭐ Todos</button>`;
+  const catLabels = {
+    'r/rr': '🔴 R / RR',
+    's/z': '🔵 S / Z',
+    'b/v': '🟢 B / V',
+    'g/j': '🟡 G / J',
+    'll/y': '🟠 LL / Y',
+    'h muda': '⚪ H muda',
+    'vocales': '🎵 Vocales',
+    'acentos': '´ Acentos',
+    'c/qu': '🔷 C / QU',
+  };
+  categories.forEach(cat => {
+    bar.innerHTML += `<button class="cat-btn" data-cat="${cat}" onclick="setCat('${cat}')">${catLabels[cat] || cat}</button>`;
+  });
+}
+
+function buildTips() {
+  const grid = document.getElementById('tipsGrid');
+  grid.innerHTML = tips.map(t => `
+    <div class="tip-card">
+      <div class="tip-icon">${t.icon}</div>
+      <div class="tip-title">${t.title}</div>
+      <div class="tip-text">${t.text}</div>
+    </div>
+  `).join('');
+}
+
+function buildStreakBar() {
+  const bar = document.getElementById('streakBar');
+  bar.innerHTML = Array.from({length: QUIZ_TOTAL}, (_, i) =>
+    `<div class="streak-dot" id="sd${i}"></div>`
+  ).join('');
+}
+
+// ─────────────────────────────────────────────
+// FILTERING
+// ─────────────────────────────────────────────
+function setLevel(level) {
+  currentLevel = level;
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  filterPairs();
+}
+
+function setCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  filterPairs();
+}
+
+function filterPairs() {
+  filteredPairs = pairs.filter(p => {
+    const levelOk = currentLevel === 'all' || p.level === currentLevel;
+    const catOk = currentCat === 'all' || p.cat === currentCat;
+    return levelOk && catOk;
+  });
+  if (!filteredPairs.length) filteredPairs = pairs;
+  currentPairIdx = 0;
+  renderPair();
+}
+
+// ─────────────────────────────────────────────
+// RENDER PAIR
+// ─────────────────────────────────────────────
+function renderPair() {
+  const p = filteredPairs[currentPairIdx];
+  if (!p) return;
+
+  document.getElementById('wordAText').textContent = p.a.word;
+  document.getElementById('ipaA').textContent = p.a.ipa;
+  document.getElementById('meaningA').textContent = p.a.meaning;
+
+  document.getElementById('wordBText').textContent = p.b.word;
+  document.getElementById('ipaB').textContent = p.b.ipa;
+  document.getElementById('meaningB').textContent = p.b.meaning;
+
+  document.getElementById('focusText').innerHTML = p.contrast;
+
+  const badge = document.getElementById('pairBadge');
+  badge.innerHTML = `<span class="badge badge-${p.level}">${p.level.toUpperCase()}</span> <span style="font-size:12px;color:var(--text-muted);margin-left:6px;">${p.cat}</span>`;
+
+  const sentEl = document.getElementById('sentenceArea');
+  if (p.sentences && p.sentences.length) {
+    const s = p.sentences[0];
+    // Highlight words from the pair
+    let highlighted = s;
+    [p.a.word, p.b.word].forEach(w => {
+      const re = new RegExp(`\\b${w}\\b`, 'gi');
+      highlighted = highlighted.replace(re, `<span class="highlight">${w}</span>`);
+    });
+    sentEl.innerHTML = `<span style="color:var(--text-muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;">Ejemplo · </span>${highlighted}`;
+  } else {
+    sentEl.innerHTML = '';
+  }
+
+  document.getElementById('pairCounter').textContent = `${currentPairIdx + 1} / ${filteredPairs.length}`;
+
+  // Clear playing states
+  document.getElementById('wordA').classList.remove('playing');
+  document.getElementById('wordB').classList.remove('playing');
+}
+
+function prevPair() {
+  currentPairIdx = (currentPairIdx - 1 + filteredPairs.length) % filteredPairs.length;
+  renderPair();
+}
+
+function nextPair() {
+  currentPairIdx = (currentPairIdx + 1) % filteredPairs.length;
+  renderPair();
+}
+
+// ─────────────────────────────────────────────
+// SPEECH
+// ─────────────────────────────────────────────
+function speak(text, lang = 'es-ES', onEnd = null) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = lang;
+  utt.rate = 0.82;
+  utt.pitch = 1.0;
+  // Try to find a Spanish voice
+  const voices = speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang.startsWith('es')) ||
+                  voices.find(v => v.lang.includes('es'));
+  if (esVoice) utt.voice = esVoice;
+  if (onEnd) utt.onend = onEnd;
+  speechSynthesis.speak(utt);
+}
+
+function speakWord(side) {
+  const p = filteredPairs[currentPairIdx];
+  const data = side === 'A' ? p.a : p.b;
+  const blockId = side === 'A' ? 'wordA' : 'wordB';
+  const waveId = side === 'A' ? 'waveA' : 'waveB';
+
+  const block = document.getElementById(blockId);
+  const wave = document.getElementById(waveId);
+
+  block.classList.add('playing');
+  wave.classList.add('active');
+
+  speak(data.word, data.lang || 'es-ES', () => {
+    block.classList.remove('playing');
+    wave.classList.remove('active');
+  });
+}
+
+function speakBoth() {
+  const p = filteredPairs[currentPairIdx];
+  const wA = document.getElementById('wordA');
+  const wB = document.getElementById('wordB');
+  const waveA = document.getElementById('waveA');
+  const waveB = document.getElementById('waveB');
+
+  wA.classList.add('playing');
+  waveA.classList.add('active');
+
+  speak(p.a.word, p.a.lang || 'es-ES', () => {
+    wA.classList.remove('playing');
+    waveA.classList.remove('active');
+    setTimeout(() => {
+      wB.classList.add('playing');
+      waveB.classList.add('active');
+      speak(p.b.word, p.b.lang || 'es-ES', () => {
+        wB.classList.remove('playing');
+        waveB.classList.remove('active');
+      });
+    }, 600);
+  });
+}
+
+function speakAlternating() {
+  const p = filteredPairs[currentPairIdx];
+  const words = [p.a, p.a, p.b, p.b, p.a, p.b];
+  const blocks = ['wordA', 'wordA', 'wordB', 'wordB', 'wordA', 'wordB'];
+  let i = 0;
+
+  function playNext() {
+    if (i >= words.length) return;
+    const w = words[i];
+    const bId = blocks[i];
+    const block = document.getElementById(bId);
+    const waveId = bId === 'wordA' ? 'waveA' : 'waveB';
+    const wave = document.getElementById(waveId);
+    block.classList.add('playing');
+    wave.classList.add('active');
+    speak(w.word, w.lang || 'es-ES', () => {
+      block.classList.remove('playing');
+      wave.classList.remove('active');
+      i++;
+      setTimeout(playNext, 400);
+    });
+  }
+  playNext();
+}
+
+// ─────────────────────────────────────────────
+// MODES
+// ─────────────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['practice','quiz','tips'][i] === mode);
+  });
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+
+  if (mode === 'practice') {
+    document.getElementById('practiceView').classList.add('active');
+  } else if (mode === 'quiz') {
+    document.getElementById('quizView').classList.add('active');
+    document.getElementById('quizContent').style.display = 'block';
+    document.getElementById('resultView').classList.remove('active');
+    startQuiz();
+  } else if (mode === 'tips') {
+    document.getElementById('tipsView').classList.add('active');
+  }
+}
+
+// ─────────────────────────────────────────────
+// QUIZ
+// ─────────────────────────────────────────────
+function startQuiz() {
+  quizScore = 0;
+  quizIdx = 0;
+  quizAnswered = false;
+  streak = 0;
+
+  // Shuffle
+  quizPairs = [...pairs].sort(() => Math.random() - 0.5).slice(0, QUIZ_TOTAL);
+
+  document.getElementById('quizContent').style.display = 'block';
+  document.getElementById('resultView').classList.remove('active');
+
+  buildStreakBar();
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (quizIdx >= QUIZ_TOTAL) {
+    showResult();
+    return;
+  }
+
+  quizAnswered = false;
+  const q = quizPairs[quizIdx];
+
+  document.getElementById('qNum').textContent = quizIdx + 1;
+  document.getElementById('qTotal').textContent = QUIZ_TOTAL;
+  document.getElementById('qScore').textContent = quizScore;
+  document.getElementById('qProgress').style.width = `${(quizIdx / QUIZ_TOTAL) * 100}%`;
+
+  // Question types rotate
+  const qType = quizIdx % 3;
+  let qLabel, qText, correctAnswer, options;
+
+  if (qType === 0) {
+    // Listen and choose word
+    qLabel = '🔊 ESCUCHA Y ELIGE LA PALABRA CORRECTA';
+    const isA = Math.random() > 0.5;
+    const target = isA ? q.a : q.b;
+    const other = isA ? q.b : q.a;
+    qText = 'Haz clic en "Escuchar" y selecciona la palabra que oyes';
+    correctAnswer = target.word;
+    options = shuffle([target.word, other.word, ...getDistractors(q, 2)]);
+    // Auto play
+    setTimeout(() => speak(target.word, target.lang || 'es-ES'), 600);
+    document.getElementById('playQBtn').onclick = () => speak(target.word, target.lang || 'es-ES');
+  } else if (qType === 1) {
+    // Choose the correct meaning
+    qLabel = '📖 ¿QUÉ SIGNIFICA ESTA PALABRA?';
+    const isA = Math.random() > 0.5;
+    const target = isA ? q.a : q.b;
+    const other = isA ? q.b : q.a;
+    qText = `"${target.word}"`;
+    correctAnswer = target.meaning;
+    options = shuffle([target.meaning, other.meaning, ...getMeaningDistractors(q, 2)]);
+    speak(target.word, target.lang || 'es-ES');
+    document.getElementById('playQBtn').onclick = () => speak(target.word, target.lang || 'es-ES');
+  } else {
+    // IPA — choose word from IPA
+    qLabel = '🔤 ¿CUÁL ES LA TRANSCRIPCIÓN CORRECTA?';
+    const isA = Math.random() > 0.5;
+    const target = isA ? q.a : q.b;
+    const other = isA ? q.b : q.a;
+    qText = `Para la palabra: "${target.word}"`;
+    correctAnswer = target.ipa;
+    options = shuffle([target.ipa, other.ipa]);
+    speak(target.word, target.lang || 'es-ES');
+    document.getElementById('playQBtn').onclick = () => speak(target.word, target.lang || 'es-ES');
+  }
+
+  document.getElementById('qLabel').textContent = qLabel;
+  document.getElementById('qText').textContent = qText;
+
+  const optEl = document.getElementById('quizOptions');
+  optEl.innerHTML = options.map(opt => `
+    <button class="quiz-opt" onclick="checkAnswer('${escHtml(opt)}', '${escHtml(correctAnswer)}')">${opt}</button>
+  `).join('');
+
+  document.getElementById('nextQBtn').style.display = 'none';
+  document.getElementById('qFeedback').className = 'feedback-banner';
+}
+
+function checkAnswer(chosen, correct) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+
+  const isCorrect = chosen === correct;
+  if (isCorrect) {
+    quizScore++;
+    streak++;
+  } else {
+    streak = 0;
+  }
+
+  // Update streak dot
+  const dot = document.getElementById(`sd${quizIdx}`);
+  if (dot) dot.classList.add('lit');
+
+  // Mark options
+  document.querySelectorAll('.quiz-opt').forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correct) btn.classList.add('correct');
+    else if (btn.textContent === chosen && !isCorrect) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('qFeedback');
+  fb.className = 'feedback-banner show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = isCorrect
+    ? `✓ ¡Correcto! ${streak >= 3 ? '🔥 Racha de ' + streak + '!' : ''}`
+    : `✗ La respuesta correcta era: <strong>${correct}</strong>`;
+
+  document.getElementById('qScore').textContent = quizScore;
+  document.getElementById('nextQBtn').style.display = 'block';
+
+  quizIdx++;
+}
+
+function nextQuestion() {
+  renderQuestion();
+}
+
+function playQuizAudio() {
+  // handled by onclick reassignment above
+}
+
+function showResult() {
+  document.getElementById('quizContent').style.display = 'none';
+  document.getElementById('resultView').classList.add('active');
+
+  const pct = Math.round((quizScore / QUIZ_TOTAL) * 100);
+  document.getElementById('finalScore').textContent = `${quizScore}/${QUIZ_TOTAL}`;
+  document.getElementById('qProgress').style.width = '100%';
+
+  let msg, sub;
+  if (pct >= 90) { msg = '🏆 ¡Excelente!'; sub = 'Tienes una discriminación auditiva excepcional.'; }
+  else if (pct >= 70) { msg = '👏 ¡Muy bien!'; sub = 'Sigue practicando los pares que te costaron más.'; }
+  else if (pct >= 50) { msg = '💪 Bien hecho'; sub = 'Vuelve a la práctica y escucha los pares con más atención.'; }
+  else { msg = '📚 ¡Sigue practicando!'; sub = 'La fonética española necesita tiempo. ¡No te rindas!'; }
+
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultSub').textContent = sub;
+}
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function getDistractors(currentPair, n) {
+  const others = pairs.filter(p => p.id !== currentPair.id);
+  const shuffled = others.sort(() => Math.random() - 0.5);
+  const result = [];
+  for (const p of shuffled) {
+    if (result.length >= n) break;
+    const w = Math.random() > 0.5 ? p.a.word : p.b.word;
+    if (w !== currentPair.a.word && w !== currentPair.b.word && !result.includes(w)) {
+      result.push(w);
+    }
+  }
+  return result;
+}
+
+function getMeaningDistractors(currentPair, n) {
+  const others = pairs.filter(p => p.id !== currentPair.id);
+  const shuffled = others.sort(() => Math.random() - 0.5);
+  const result = [];
+  for (const p of shuffled) {
+    if (result.length >= n) break;
+    const m = Math.random() > 0.5 ? p.a.meaning : p.b.meaning;
+    if (m !== currentPair.a.meaning && m !== currentPair.b.meaning && !result.includes(m)) {
+      result.push(m);
+    }
+  }
+  return result;
+}
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function escHtml(str) {
+  return String(str).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+}
+
+// Load voices
+if (window.speechSynthesis) {
+  speechSynthesis.onvoiceschanged = () => {};
+  speechSynthesis.getVoices();
+}
+
+init();
+</script>
+</body>
+</html>
